@@ -80,6 +80,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -290,9 +298,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:PinterestIDsReplecer"
+        "ProductName" = "8:PinterestIDsReplacer"
         "ProductCode" = "8:{53468978-F064-4A50-BF69-80BA4E4293EF}"
-        "PackageCode" = "8:{0DA71232-2E5C-4525-87CA-CA45221ECCB6}"
+        "PackageCode" = "8:{4BBFEE6E-6641-43C5-85D0-1F0821AB4CF1}"
         "UpgradeCode" = "8:{D08F9060-7755-41C4-8560-0BD16DE1B5A9}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -303,7 +311,7 @@
         "Manufacturer" = "8:Keis Info Sistemi"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:PinterestIDsReplecer.Setup"
+        "Title" = "8:PinterestIDsReplacer.Setup"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Igor Sushelski"
         "Keywords" = "8:"

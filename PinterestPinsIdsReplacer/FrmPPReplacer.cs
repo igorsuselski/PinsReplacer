@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace PinterestPinsIdsReplacer
 {
@@ -15,10 +16,9 @@ namespace PinterestPinsIdsReplacer
 
         private string Url { get; set; }
 
-        private const string ProtoShema = "pin_ids *% *22 *% *3A *% *5B *% *22BELGIUM *% *22 *% *2C *% *22CROATIA *% *22 *% *2C *% *22HUNGARY *% *22 *% *2C *% *22MACEDONIA *% *22 *% *2C *% *22RUSSIA *% *22 *% *2C *% *22TANGO *% *22 *% *2C *% *22AJVAR *% *22 *% *2C *% *22RISTE *% *22 *% *2C *% *22KINEZI *% *22 *% *2C *% *22PARMA *% *22 *% *2C *% *22JUVENTUS *% *22 *% *2C *% *22MILAN *% *22 *% *2C *% *22INTER *% *22 *% *2C *% *22REGINA *% *22 *% *2C *% *22LAZIO *% *22 *% *2C *% *22CHIEVO *% *22 *% *2C *% *22SIENA *% *22 *% *2C *% *22FIORENTINA *% *22 *% *2C *% *22BELVEDERE *% *22 *% *2C *% *22LASVEGAS *% *22 *% *2C *% *22KICEVO *% *22 *% *2C *% *22BERLIN *% *22 *% *2C *% *22MOSCOW *% *22 *% *2C *% *22JAPAN *% *22 *% *2C *% *22TOKYO *% *22 *% *2C *% *22SRBIJA *% *22 *% *2C *% *22BASKET *% *22 *% *2C *% *22TENNIS *% *22 *% *2C *% *22PISTOL *% *22 *% *2C *% *22STREET *% *22 *% *2C *% *22KOZITE *% *22 *% *2C *% *22OVCITE *% *22 *% *2C *% *22GOVEDA *% *22 *% *2C *% *22KRAVI *% *22 *% *2C *% *22VOLOVI *% *22 *% *2C *% *22VOLVO *% *22 *% *2C *% *22DANSKA *% *22 *% *2C *% *22SIBIR *% *22 *% *2C *% *22KAMCHATKA *% *22 *% *2C *% *22FLORIDA *% *22 *% *2C *% *22AJDAHO *% *22 *% *2C *% *22NEVADA *% *22 *% *2C *% *22TEXAS *% *22 *% *2C *% *22DETROIT *% *22 *% *2C *% *22PHOENIX *% *22 *% *2C *% *22DALLAS *% *22 *% *2C *% *22DENVER *% *22 *% *2C *% *22OKLAHOMA *% *22 *% *5D *% *7D *% *2C *% *22context *% *22 *% *3A *% *7B *% *7D *% *7D *";
+        private string ProtoShemaData { get; set; }
 
-        private string[] WordsToReplace = new string[] { "BELGIUM", "CROATIA", "HUNGARY", "MACEDONIA", "RUSSIA", "TANGO", "AJVAR", "RISTE", "KINEZI", "PARMA", "JUVENTUS", "MILAN", "INTER", "REGINA", "LAZIO", "CHIEVO", "SIENA", "FIORENTINA", "BELVEDERE", "LASVEGAS", "KICEVO", "BERLIN", "MOSCOW", "JAPAN", "TOKYO", "SRBIJA", "BASKET", "TENNIS", "PISTOL", "STREET", "KOZITE", "OVCITE", "GOVEDA", "KRAVI", "VOLOVI", "VOLVO", "DANSKA", "SIBIR", "KAMCHATKA", "FLORIDA", "AJDAHO", "NEVADA", "TEXAS", "DETROIT", "PHOENIX", "DALLAS", "DENVER", "OKLAHOMA" };
-
+        private string[] WordsToReplaceFromShema { get; set; }
 
         public FrmPPReplacer()
         {
@@ -29,8 +29,59 @@ namespace PinterestPinsIdsReplacer
         {
             PicLoader.Hide();
             PicIsValidJson.Hide();
+            PicClearLinc.Hide();
             TxtUrl.Focus();
             BtnGenerateIDs.Enabled = false;
+            SetProtoShema();
+            SetReplaceWordsShema();
+        }
+
+        private void SetProtoShema()
+        {
+            try
+            {
+                using (StreamReader sr = new StreamReader(ConfigurationManager.AppSettings["ProtoShemaTxtPath"]))
+                {
+                    string text = sr.ReadToEnd();
+                    ProtoShemaData = text;
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        private void SetReplaceWordsShema()
+        {
+            string line = "";
+            int count = 0;
+            try
+            {
+                using (StreamReader sr = new StreamReader(ConfigurationManager.AppSettings["WordsToReplaceTxtPath"]))
+                {
+                    while (sr.ReadLine() != null)
+                    {
+                        count++;
+                    }
+                    WordsToReplaceFromShema = new string[count];
+                    count = 0;
+                    sr.DiscardBufferedData();
+                    sr.DiscardBufferedData();
+                    sr.BaseStream.Seek(0, SeekOrigin.Begin);
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        WordsToReplaceFromShema[count] = line;
+                        count++;
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
         }
 
         private async void TxtUrl_TextChanged(object sender, EventArgs e)
@@ -39,7 +90,7 @@ namespace PinterestPinsIdsReplacer
 
             if (IsValidURL(Url))
             {
-                TxtConsole.Text += "> Get JSON" + Environment.NewLine;
+                TxtConsole.Text += "> Get data" + Environment.NewLine;
                 PicLoader.Show();
                 Task<bool> getJson = new Task<bool>(GetJson);
                 getJson.Start();
@@ -47,9 +98,10 @@ namespace PinterestPinsIdsReplacer
 
                 if (success)
                 {
-                    TxtConsole.Text += "> ЈSОN is valid" + Environment.NewLine + "> JSON object created" + Environment.NewLine;
+                    TxtConsole.Text += "> ЈSОN is valid" + Environment.NewLine + "> JSON deserialized object created" + Environment.NewLine;
                     PicLoader.Hide();
                     PicIsValidJson.Show();
+                    PicClearLinc.Show();
                     BtnGenerateIDs.Enabled = true;
                 }
                 else
@@ -57,6 +109,7 @@ namespace PinterestPinsIdsReplacer
                     TxtConsole.Clear();
                     PicIsValidJson.Hide();
                     PicLoader.Hide();
+                    PicClearLinc.Hide();
                     BtnGenerateIDs.Enabled = false;
                 }
             }
@@ -64,6 +117,7 @@ namespace PinterestPinsIdsReplacer
             if (TxtUrl.Text == "")
             {
                 TxtConsole.Clear();
+                PicClearLinc.Hide();
                 PicIsValidJson.Hide();
                 PicLoader.Hide();
                 BtnGenerateIDs.Enabled = false;
@@ -95,8 +149,13 @@ namespace PinterestPinsIdsReplacer
 
         private void BtnPrototype_Click(object sender, EventArgs e)
         {
-            FrmProto proto = new FrmProto() { ProtoText = ProtoShema };
+            FrmProto proto = new FrmProto() { ProtoText = ProtoShemaData };
             proto.ShowDialog();
+            if (proto.Refreshed)
+            {
+                SetProtoShema();
+                SetReplaceWordsShema();
+            }
         }
 
         private void TxtConsole_KeyPress(object sender, KeyPressEventArgs e)
@@ -104,62 +163,59 @@ namespace PinterestPinsIdsReplacer
             e.Handled = true;
         }
 
-        private void TxtUrl_DragDrop(object sender, DragEventArgs e)
+        private void TxtUrl_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                if (System.IO.Directory.Exists(files[0]))
-                    TxtUrl.Text = files[0];
-            }
-        }
-
-        private void TxtUrl_DragOver(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.Copy;
-            else
-                e.Effect = DragDropEffects.None;
+            e.Effect = DragDropEffects.All;
+            TxtUrl.Text = e.Data.GetData(DataFormats.Text).ToString();
         }
 
         private void BtnGenerateIDs_Click(object sender, EventArgs e)
-        {          
-            int count = Response["data"]["pins"].Count;
-            string[] idS = new string[count];
-            for (int i = 0; i < count; i++)
+        {
+            try
             {
-                string id = Response["data"]["pins"][i]["id"];
-                TxtConsole.Text += $" pins[{i}].id = {id}" + Environment.NewLine;
-                idS[i] = id;
-            }
+                int count = Response["data"]["pins"].Count;
+                string[] idS = new string[count];
+                string id = "";
 
-            TxtConsole.Text += "> Replace unique words with pins IDs:" + Environment.NewLine;
-            string protoString = ProtoShema;
-
-            for (int i = 0; i < idS.Length; i++)
-            {
-                if (ProtoShema.Contains(WordsToReplace[i]))
+                for (int i = 0; i < count; i++)
                 {
-                    protoString = protoString.Replace(WordsToReplace[i], idS[i]);
+                    id = Response["data"]["pins"][i]["id"];
+                    TxtConsole.Text += $" pins[{i}].id = {id}" + Environment.NewLine;
+                    idS[i] = id;
+                }
+
+                TxtConsole.Text += $"> Number of IDs: {count}" + Environment.NewLine;
+                TxtConsole.Text += "> Replace unique words with pins IDs:" + Environment.NewLine;
+                int replaceCount = 0;
+
+                for (int i = 0; i < idS.Length; i++)
+                {
+                    if (ProtoShemaData.Contains(WordsToReplaceFromShema[i]))
+                    {
+                        ProtoShemaData = ProtoShemaData.Replace(WordsToReplaceFromShema[i], idS[i]);
+                        replaceCount++;
+                    }
+                }
+
+                TxtConsole.Text += "> " + ProtoShemaData.ToString() + Environment.NewLine;
+                TxtConsole.ForeColor = Color.DarkCyan;
+                TxtConsole.Text += $"> Total replaced: {replaceCount}." + Environment.NewLine + "Operation Completed";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (Stream s = File.Open(saveFileDialog.FileName, FileMode.CreateNew))
+                    using (TextWriter sw = new StreamWriter(s))
+                    {
+                        TxtConsole.Text = ProtoShemaData;
+                        sw.Write(TxtConsole.Text);
+                    }
                 }
             }
-
-            protoString = protoString.Replace("*", "\"");
-            protoString = protoString.Replace(" ", "");
-
-            TxtConsole.Text += "> " + protoString.ToString() + Environment.NewLine;
-            TxtConsole.ForeColor = Color.DarkCyan;
-            TxtConsole.Text += "> Operation Completed";
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            catch (Exception ex)
             {
-                using (Stream s = File.Open(saveFileDialog.FileName, FileMode.CreateNew))
-                using (TextWriter sw = new StreamWriter(s))
-                {
-                    TxtConsole.Text = protoString;
-                    sw.Write(TxtConsole.Text);
-                }
+                TxtConsole.ForeColor = Color.IndianRed;
+                MessageBox.Show(ex.Message);
+                TxtConsole.Text += "> Operation Failed";
             }
         }
 
@@ -168,5 +224,7 @@ namespace PinterestPinsIdsReplacer
             TxtConsole.SelectionStart = TxtConsole.Text.Length;
             TxtConsole.ScrollToCaret();
         }
+
+        private void PictureBox3_Click(object sender, EventArgs e) => TxtUrl.Clear();
     }
 }

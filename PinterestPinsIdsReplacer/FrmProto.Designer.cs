@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmProto));
             this.button1 = new System.Windows.Forms.Button();
             this.TxtProtoString = new System.Windows.Forms.RichTextBox();
+            this.BtnProtoShema = new System.Windows.Forms.Button();
+            this.BtnWordsToReplace = new System.Windows.Forms.Button();
+            this.BtnRefresh = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -43,7 +46,7 @@
             this.button1.Font = new System.Drawing.Font("Open Sans Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.Location = new System.Drawing.Point(287, 12);
+            this.button1.Location = new System.Drawing.Point(11, 9);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(81, 51);
             this.button1.TabIndex = 5;
@@ -56,17 +59,77 @@
             this.TxtProtoString.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.TxtProtoString.Location = new System.Drawing.Point(2, 69);
             this.TxtProtoString.Name = "TxtProtoString";
-            this.TxtProtoString.Size = new System.Drawing.Size(665, 307);
+            this.TxtProtoString.Size = new System.Drawing.Size(665, 309);
             this.TxtProtoString.TabIndex = 6;
             this.TxtProtoString.Text = "";
             this.TxtProtoString.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtProtoString_KeyPress);
+            // 
+            // BtnProtoShema
+            // 
+            this.BtnProtoShema.BackColor = System.Drawing.Color.Transparent;
+            this.BtnProtoShema.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnProtoShema.FlatAppearance.BorderColor = System.Drawing.Color.LightSteelBlue;
+            this.BtnProtoShema.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSteelBlue;
+            this.BtnProtoShema.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnProtoShema.Font = new System.Drawing.Font("Open Sans Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.BtnProtoShema.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.BtnProtoShema.Image = ((System.Drawing.Image)(resources.GetObject("BtnProtoShema.Image")));
+            this.BtnProtoShema.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnProtoShema.Location = new System.Drawing.Point(496, 1);
+            this.BtnProtoShema.Name = "BtnProtoShema";
+            this.BtnProtoShema.Size = new System.Drawing.Size(171, 32);
+            this.BtnProtoShema.TabIndex = 7;
+            this.BtnProtoShema.Text = "Proto Shema txt";
+            this.BtnProtoShema.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.BtnProtoShema.UseVisualStyleBackColor = false;
+            this.BtnProtoShema.Click += new System.EventHandler(this.BtnProtoShema_Click);
+            // 
+            // BtnWordsToReplace
+            // 
+            this.BtnWordsToReplace.BackColor = System.Drawing.Color.Transparent;
+            this.BtnWordsToReplace.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnWordsToReplace.FlatAppearance.BorderColor = System.Drawing.Color.LightSteelBlue;
+            this.BtnWordsToReplace.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSteelBlue;
+            this.BtnWordsToReplace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnWordsToReplace.Font = new System.Drawing.Font("Open Sans Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.BtnWordsToReplace.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.BtnWordsToReplace.Image = ((System.Drawing.Image)(resources.GetObject("BtnWordsToReplace.Image")));
+            this.BtnWordsToReplace.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnWordsToReplace.Location = new System.Drawing.Point(496, 35);
+            this.BtnWordsToReplace.Name = "BtnWordsToReplace";
+            this.BtnWordsToReplace.Size = new System.Drawing.Size(171, 32);
+            this.BtnWordsToReplace.TabIndex = 8;
+            this.BtnWordsToReplace.Text = "Words to Replace txt";
+            this.BtnWordsToReplace.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.BtnWordsToReplace.UseVisualStyleBackColor = false;
+            this.BtnWordsToReplace.Click += new System.EventHandler(this.BtnWordsToReplace_Click);
+            // 
+            // BtnRefresh
+            // 
+            this.BtnRefresh.BackColor = System.Drawing.Color.Transparent;
+            this.BtnRefresh.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnRefresh.FlatAppearance.BorderColor = System.Drawing.Color.LightSteelBlue;
+            this.BtnRefresh.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSteelBlue;
+            this.BtnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnRefresh.Font = new System.Drawing.Font("Open Sans Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.BtnRefresh.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.BtnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("BtnRefresh.Image")));
+            this.BtnRefresh.Location = new System.Drawing.Point(305, 9);
+            this.BtnRefresh.Name = "BtnRefresh";
+            this.BtnRefresh.Size = new System.Drawing.Size(81, 51);
+            this.BtnRefresh.TabIndex = 9;
+            this.BtnRefresh.UseVisualStyleBackColor = false;
+            this.BtnRefresh.Click += new System.EventHandler(this.BtnRefresh_Click);
             // 
             // FrmProto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.BackColor = System.Drawing.Color.LightGray;
             this.ClientSize = new System.Drawing.Size(669, 380);
+            this.Controls.Add(this.BtnRefresh);
+            this.Controls.Add(this.BtnWordsToReplace);
+            this.Controls.Add(this.BtnProtoShema);
             this.Controls.Add(this.TxtProtoString);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -82,5 +145,8 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.RichTextBox TxtProtoString;
+        private System.Windows.Forms.Button BtnProtoShema;
+        private System.Windows.Forms.Button BtnWordsToReplace;
+        private System.Windows.Forms.Button BtnRefresh;
     }
 }
