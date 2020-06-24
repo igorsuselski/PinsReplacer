@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -19,6 +20,7 @@ namespace PinterestPinsIdsReplacer
         private string ProtoShemaData { get; set; }
 
         private string[] WordsToReplaceFromShema { get; set; }
+        public bool JsonPreview { get; private set; }
 
         public FrmPPReplacer()
         {
@@ -30,7 +32,9 @@ namespace PinterestPinsIdsReplacer
             PicLoader.Hide();
             PicIsValidJson.Hide();
             PicClearLinc.Hide();
+            PicJson.Enabled = false;
             TxtUrl.Focus();
+            
             BtnGenerateIDs.Enabled = false;
             SetProtoShema();
             SetReplaceWordsShema();
@@ -90,6 +94,8 @@ namespace PinterestPinsIdsReplacer
 
             if (IsValidURL(Url))
             {
+                TxtConsole.Clear();
+
                 TxtConsole.Text += "> Get data" + Environment.NewLine;
                 PicLoader.Show();
                 Task<bool> getJson = new Task<bool>(GetJson);
@@ -102,6 +108,7 @@ namespace PinterestPinsIdsReplacer
                     PicLoader.Hide();
                     PicIsValidJson.Show();
                     PicClearLinc.Show();
+                    PicJson.Enabled = true;
                     BtnGenerateIDs.Enabled = true;
                 }
                 else
@@ -111,6 +118,7 @@ namespace PinterestPinsIdsReplacer
                     PicLoader.Hide();
                     PicClearLinc.Hide();
                     BtnGenerateIDs.Enabled = false;
+                    PicJson.Enabled = false;
                 }
             }
 
@@ -171,6 +179,7 @@ namespace PinterestPinsIdsReplacer
 
         private void BtnGenerateIDs_Click(object sender, EventArgs e)
         {
+            if (JsonPreview) TxtConsole.Clear();
             try
             {
                 int count = Response["data"]["pins"].Count;
@@ -186,18 +195,19 @@ namespace PinterestPinsIdsReplacer
 
                 TxtConsole.Text += $"> Number of IDs: {count}" + Environment.NewLine;
                 TxtConsole.Text += "> Replace unique words with pins IDs:" + Environment.NewLine;
-                int replaceCount = 0;
 
+                string resultsShema = ProtoShemaData;
+                int replaceCount = 0;        
                 for (int i = 0; i < idS.Length; i++)
                 {
-                    if (ProtoShemaData.Contains(WordsToReplaceFromShema[i]))
+                    if (resultsShema.Contains(WordsToReplaceFromShema[i]))
                     {
-                        ProtoShemaData = ProtoShemaData.Replace(WordsToReplaceFromShema[i], idS[i]);
+                        resultsShema = resultsShema.Replace(WordsToReplaceFromShema[i], idS[i]);
                         replaceCount++;
                     }
                 }
 
-                TxtConsole.Text += "> " + ProtoShemaData.ToString() + Environment.NewLine;
+                TxtConsole.Text += "> " + resultsShema.ToString() + Environment.NewLine;
                 TxtConsole.ForeColor = Color.DarkCyan;
                 TxtConsole.Text += $"> Total replaced: {replaceCount}." + Environment.NewLine + "Operation Completed";
 
@@ -206,7 +216,7 @@ namespace PinterestPinsIdsReplacer
                     using (Stream s = File.Open(saveFileDialog.FileName, FileMode.CreateNew))
                     using (TextWriter sw = new StreamWriter(s))
                     {
-                        TxtConsole.Text = ProtoShemaData;
+                        TxtConsole.Text = resultsShema;
                         sw.Write(TxtConsole.Text);
                     }
                 }
@@ -226,5 +236,28 @@ namespace PinterestPinsIdsReplacer
         }
 
         private void PictureBox3_Click(object sender, EventArgs e) => TxtUrl.Clear();
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.pinterest.com/");
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            TxtConsole.Clear();
+            TxtConsole.Text = Response.ToString() ?? "no object";
+            JsonPreview = true;
+        }
+
+        private void TxtConsole_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            if (IsHttpURL(e.LinkText)) Process.Start(e.LinkText);
+        }
+
+        private bool IsHttpURL(string url)
+        {
+            return ((!string.IsNullOrWhiteSpace(url)) &&
+                   (url.ToLower().StartsWith("http")) || (url.ToLower().StartsWith("www")));
+        }
     }
 }

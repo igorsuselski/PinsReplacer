@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmProto));
             this.button1 = new System.Windows.Forms.Button();
             this.TxtProtoString = new System.Windows.Forms.RichTextBox();
             this.BtnProtoShema = new System.Windows.Forms.Button();
             this.BtnWordsToReplace = new System.Windows.Forms.Button();
             this.BtnRefresh = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // button1
@@ -50,6 +52,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(81, 51);
             this.button1.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.button1, "Back");
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.BtnClose_Click);
             // 
@@ -118,6 +121,7 @@
             this.BtnRefresh.Name = "BtnRefresh";
             this.BtnRefresh.Size = new System.Drawing.Size(81, 51);
             this.BtnRefresh.TabIndex = 9;
+            this.toolTip1.SetToolTip(this.BtnRefresh, "Refresh shemas");
             this.BtnRefresh.UseVisualStyleBackColor = false;
             this.BtnRefresh.Click += new System.EventHandler(this.BtnRefresh_Click);
             // 
@@ -148,5 +152,6 @@
         private System.Windows.Forms.Button BtnProtoShema;
         private System.Windows.Forms.Button BtnWordsToReplace;
         private System.Windows.Forms.Button BtnRefresh;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
