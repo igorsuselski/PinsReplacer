@@ -125,13 +125,14 @@
             this.TxtConsole.BackColor = System.Drawing.Color.WhiteSmoke;
             this.TxtConsole.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TxtConsole.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.TxtConsole.Location = new System.Drawing.Point(7, 125);
+            this.TxtConsole.Location = new System.Drawing.Point(7, 123);
             this.TxtConsole.Name = "TxtConsole";
             this.TxtConsole.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.TxtConsole.Size = new System.Drawing.Size(780, 440);
+            this.TxtConsole.Size = new System.Drawing.Size(780, 442);
             this.TxtConsole.TabIndex = 0;
             this.TxtConsole.TabStop = false;
             this.TxtConsole.Text = "";
+            this.TxtConsole.TextChanged += new System.EventHandler(this.TxtConsole_TextChanged);
             this.TxtConsole.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtConsole_KeyPress);
             // 
             // BtnPrototype

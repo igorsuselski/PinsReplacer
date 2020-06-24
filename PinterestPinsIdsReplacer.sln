@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.1145
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PinterestPinsIdsReplacer", "PinterestPinsIdsReplacer\PinterestPinsIdsReplacer.csproj", "{B93101FC-B9A4-47FE-9B56-787AD9B555DA}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PinterestPinsIdsReplecer.Setup", "PinterestPinsIdsReplecer.Setup\PinterestPinsIdsReplecer.Setup.vdproj", "{D4489CFF-5729-46D7-865A-03A08EDB4FD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{B93101FC-B9A4-47FE-9B56-787AD9B555DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B93101FC-B9A4-47FE-9B56-787AD9B555DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B93101FC-B9A4-47FE-9B56-787AD9B555DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4489CFF-5729-46D7-865A-03A08EDB4FD3}.Debug|Any CPU.ActiveCfg = Debug
+		{D4489CFF-5729-46D7-865A-03A08EDB4FD3}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

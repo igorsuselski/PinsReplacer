@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -15,6 +16,7 @@ namespace PinterestPinsIdsReplacer
         private string Url { get; set; }
 
         private const string ProtoShema = "pin_ids *% *22 *% *3A *% *5B *% *22BELGIUM *% *22 *% *2C *% *22CROATIA *% *22 *% *2C *% *22HUNGARY *% *22 *% *2C *% *22MACEDONIA *% *22 *% *2C *% *22RUSSIA *% *22 *% *2C *% *22TANGO *% *22 *% *2C *% *22AJVAR *% *22 *% *2C *% *22RISTE *% *22 *% *2C *% *22KINEZI *% *22 *% *2C *% *22PARMA *% *22 *% *2C *% *22JUVENTUS *% *22 *% *2C *% *22MILAN *% *22 *% *2C *% *22INTER *% *22 *% *2C *% *22REGINA *% *22 *% *2C *% *22LAZIO *% *22 *% *2C *% *22CHIEVO *% *22 *% *2C *% *22SIENA *% *22 *% *2C *% *22FIORENTINA *% *22 *% *2C *% *22BELVEDERE *% *22 *% *2C *% *22LASVEGAS *% *22 *% *2C *% *22KICEVO *% *22 *% *2C *% *22BERLIN *% *22 *% *2C *% *22MOSCOW *% *22 *% *2C *% *22JAPAN *% *22 *% *2C *% *22TOKYO *% *22 *% *2C *% *22SRBIJA *% *22 *% *2C *% *22BASKET *% *22 *% *2C *% *22TENNIS *% *22 *% *2C *% *22PISTOL *% *22 *% *2C *% *22STREET *% *22 *% *2C *% *22KOZITE *% *22 *% *2C *% *22OVCITE *% *22 *% *2C *% *22GOVEDA *% *22 *% *2C *% *22KRAVI *% *22 *% *2C *% *22VOLOVI *% *22 *% *2C *% *22VOLVO *% *22 *% *2C *% *22DANSKA *% *22 *% *2C *% *22SIBIR *% *22 *% *2C *% *22KAMCHATKA *% *22 *% *2C *% *22FLORIDA *% *22 *% *2C *% *22AJDAHO *% *22 *% *2C *% *22NEVADA *% *22 *% *2C *% *22TEXAS *% *22 *% *2C *% *22DETROIT *% *22 *% *2C *% *22PHOENIX *% *22 *% *2C *% *22DALLAS *% *22 *% *2C *% *22DENVER *% *22 *% *2C *% *22OKLAHOMA *% *22 *% *5D *% *7D *% *2C *% *22context *% *22 *% *3A *% *7B *% *7D *% *7D *";
+
         private string[] WordsToReplace = new string[] { "BELGIUM", "CROATIA", "HUNGARY", "MACEDONIA", "RUSSIA", "TANGO", "AJVAR", "RISTE", "KINEZI", "PARMA", "JUVENTUS", "MILAN", "INTER", "REGINA", "LAZIO", "CHIEVO", "SIENA", "FIORENTINA", "BELVEDERE", "LASVEGAS", "KICEVO", "BERLIN", "MOSCOW", "JAPAN", "TOKYO", "SRBIJA", "BASKET", "TENNIS", "PISTOL", "STREET", "KOZITE", "OVCITE", "GOVEDA", "KRAVI", "VOLOVI", "VOLVO", "DANSKA", "SIBIR", "KAMCHATKA", "FLORIDA", "AJDAHO", "NEVADA", "TEXAS", "DETROIT", "PHOENIX", "DALLAS", "DENVER", "OKLAHOMA" };
 
 
@@ -74,7 +76,6 @@ namespace PinterestPinsIdsReplacer
             {
                 WebClient client = new WebClient();
                 string json = client.DownloadString(Url);
-                File.WriteAllText("fileName.json", json);
                 Response = JsonConvert.DeserializeObject(json);
                 return true;
             }
@@ -148,6 +149,7 @@ namespace PinterestPinsIdsReplacer
             protoString = protoString.Replace(" ", "");
 
             TxtConsole.Text += "> " + protoString.ToString() + Environment.NewLine;
+            TxtConsole.ForeColor = Color.DarkCyan;
             TxtConsole.Text += "> Operation Completed";
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -159,7 +161,12 @@ namespace PinterestPinsIdsReplacer
                     sw.Write(TxtConsole.Text);
                 }
             }
+        }
 
+        private void TxtConsole_TextChanged(object sender, EventArgs e)
+        {
+            TxtConsole.SelectionStart = TxtConsole.Text.Length;
+            TxtConsole.ScrollToCaret();
         }
     }
 }
