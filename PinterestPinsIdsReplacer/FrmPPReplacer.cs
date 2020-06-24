@@ -20,6 +20,7 @@ namespace PinterestPinsIdsReplacer
         private string ProtoShemaData { get; set; }
 
         private string[] WordsToReplaceFromShema { get; set; }
+
         public bool JsonPreview { get; private set; }
 
         public FrmPPReplacer()
@@ -88,49 +89,50 @@ namespace PinterestPinsIdsReplacer
             }
         }
 
-        private async void TxtUrl_TextChanged(object sender, EventArgs e)
+        private async void TxtUrl_KeyPress(object sender, KeyPressEventArgs e)
         {
-            Url = TxtUrl.Text.Trim();
-
-            if (IsValidURL(Url))
+            if (e.KeyChar == (char)Keys.Enter)
             {
-                TxtConsole.Clear();
+                Url = TxtUrl.Text.Trim() + TxtUrlProfil.Text.Trim() + TxtUrlBoard.Text.Trim();
 
-                TxtConsole.Text += "> Get data" + Environment.NewLine;
-                PicLoader.Show();
-                Task<bool> getJson = new Task<bool>(GetJson);
-                getJson.Start();
-                bool success = await getJson;
-
-                if (success)
+                if (IsValidURL(Url))
                 {
-                    TxtConsole.Text += "> ЈSОN is valid" + Environment.NewLine + "> JSON deserialized object created" + Environment.NewLine;
-                    PicLoader.Hide();
-                    PicIsValidJson.Show();
-                    PicClearLinc.Show();
-                    PicJson.Enabled = true;
-                    BtnGenerateIDs.Enabled = true;
+                    TxtConsole.Clear();
+                    TxtConsole.ForeColor = Color.DarkSlateGray;
+                    TxtConsole.Text += "> Get data" + Environment.NewLine;
+                    PicLoader.Show();
+                    Task<bool> getJson = new Task<bool>(GetJson);
+                    getJson.Start();
+                    bool success = await getJson;
+
+                    if (success)
+                    {
+                        TxtConsole.Text += "> ЈSОN is valid" + Environment.NewLine + "> JSON deserialized object created" + Environment.NewLine;
+                        PicLoader.Hide();
+                        PicIsValidJson.Show();
+                        PicJson.Enabled = true;
+                        BtnGenerateIDs.Enabled = true;
+                        BtnGenerateIDs.Focus();
+                    }
+                    else
+                    {
+                        TxtConsole.Clear();
+                        PicIsValidJson.Hide();
+                        PicLoader.Hide();
+                        BtnGenerateIDs.Enabled = false;
+                        PicJson.Enabled = false;
+                    }
                 }
-                else
+
+                if (TxtUrl.Text == "")
                 {
                     TxtConsole.Clear();
                     PicIsValidJson.Hide();
                     PicLoader.Hide();
-                    PicClearLinc.Hide();
                     BtnGenerateIDs.Enabled = false;
-                    PicJson.Enabled = false;
                 }
             }
-
-            if (TxtUrl.Text == "")
-            {
-                TxtConsole.Clear();
-                PicClearLinc.Hide();
-                PicIsValidJson.Hide();
-                PicLoader.Hide();
-                BtnGenerateIDs.Enabled = false;
-            }
-        }
+        }   
 
         private bool GetJson()
         {
@@ -173,13 +175,14 @@ namespace PinterestPinsIdsReplacer
 
         private void TxtUrl_DragEnter(object sender, DragEventArgs e)
         {
+            TextBox url = (sender as TextBox);
             e.Effect = DragDropEffects.All;
-            TxtUrl.Text = e.Data.GetData(DataFormats.Text).ToString();
+            url.Text = e.Data.GetData(DataFormats.Text).ToString();
         }
 
         private void BtnGenerateIDs_Click(object sender, EventArgs e)
         {
-            if (JsonPreview) TxtConsole.Clear();
+            TxtConsole.Clear();
             try
             {
                 int count = Response["data"]["pins"].Count;
@@ -211,8 +214,10 @@ namespace PinterestPinsIdsReplacer
                 TxtConsole.ForeColor = Color.DarkCyan;
                 TxtConsole.Text += $"> Total replaced: {replaceCount}." + Environment.NewLine + "Operation Completed";
 
+
+                
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
+                {                  
                     using (Stream s = File.Open(saveFileDialog.FileName, FileMode.CreateNew))
                     using (TextWriter sw = new StreamWriter(s))
                     {
@@ -237,15 +242,15 @@ namespace PinterestPinsIdsReplacer
 
         private void PictureBox3_Click(object sender, EventArgs e) => TxtUrl.Clear();
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void Postebins_Click(object sender, EventArgs e)
         {
-            Process.Start("https://www.pinterest.com/");
+            TxtUrl.Text = @"https://widgets.pinterest.com/v3/pidgets/boards/";
         }
 
-        private void pictureBox2_Click(object sender, EventArgs e)
+        private void PictureBox2_Click(object sender, EventArgs e)
         {
             TxtConsole.Clear();
-            TxtConsole.Text = Response.ToString() ?? "no object";
+            TxtConsole.Text = Response.ToString();
             JsonPreview = true;
         }
 
@@ -258,6 +263,19 @@ namespace PinterestPinsIdsReplacer
         {
             return ((!string.IsNullOrWhiteSpace(url)) &&
                    (url.ToLower().StartsWith("http")) || (url.ToLower().StartsWith("www")));
+        }
+
+        private void TxtUrl_TextChanged(object sender, EventArgs e)
+        {
+            if (TxtUrl.Text.Trim() == "")
+            {
+                TxtConsole.Clear();
+                PicClearLinc.Hide();
+                TxtUrlBoard.Clear();
+                TxtUrlProfil.Clear();
+            }
+            else { PicClearLinc.Show(); }
+        
         }
     }
 }
