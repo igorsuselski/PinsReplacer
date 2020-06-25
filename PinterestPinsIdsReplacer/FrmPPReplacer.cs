@@ -93,7 +93,7 @@ namespace PinterestPinsIdsReplacer
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                Url = TxtUrl.Text.Trim() + TxtUrlProfil.Text.Trim() + TxtUrlBoard.Text.Trim();
+                Url = $"{TxtUrl.Text.Trim()}/{TxtUrlBoard.Text.Trim()}/{TxtUrlPins.Text.Trim()}";
 
                 if (IsValidURL(Url))
                 {
@@ -132,6 +132,7 @@ namespace PinterestPinsIdsReplacer
                     BtnGenerateIDs.Enabled = false;
                 }
             }
+
         }   
 
         private bool GetJson()
@@ -232,6 +233,8 @@ namespace PinterestPinsIdsReplacer
                 MessageBox.Show(ex.Message);
                 TxtConsole.Text += "> Operation Failed";
             }
+
+            TxtUrlPins.Focus();
         }
 
         private void TxtConsole_TextChanged(object sender, EventArgs e)
@@ -245,6 +248,7 @@ namespace PinterestPinsIdsReplacer
         private void Postebins_Click(object sender, EventArgs e)
         {
             TxtUrl.Text = @"https://widgets.pinterest.com/v3/pidgets/boards/";
+            TxtUrlPins.Text = "pins/";
         }
 
         private void PictureBox2_Click(object sender, EventArgs e)
@@ -271,8 +275,8 @@ namespace PinterestPinsIdsReplacer
             {
                 TxtConsole.Clear();
                 PicClearLinc.Hide();
+                TxtUrlPins.Clear();
                 TxtUrlBoard.Clear();
-                TxtUrlProfil.Clear();
             }
             else { PicClearLinc.Show(); }
         
