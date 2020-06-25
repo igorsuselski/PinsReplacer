@@ -184,6 +184,7 @@ namespace PinterestPinsIdsReplacer
         private void BtnGenerateIDs_Click(object sender, EventArgs e)
         {
             TxtConsole.Clear();
+            string resultsShema = "";
             try
             {
                 int count = Response["data"]["pins"].Count;
@@ -200,7 +201,7 @@ namespace PinterestPinsIdsReplacer
                 TxtConsole.Text += $"> Number of IDs: {count}" + Environment.NewLine;
                 TxtConsole.Text += "> Replace unique words with pins IDs:" + Environment.NewLine;
 
-                string resultsShema = ProtoShemaData;
+                resultsShema = ProtoShemaData;
                 int replaceCount = 0;        
                 for (int i = 0; i < idS.Length; i++)
                 {
@@ -213,25 +214,23 @@ namespace PinterestPinsIdsReplacer
 
                 TxtConsole.Text += "> " + resultsShema.ToString() + Environment.NewLine;
                 TxtConsole.ForeColor = Color.DarkCyan;
-                TxtConsole.Text += $"> Total replaced: {replaceCount}." + Environment.NewLine + "Operation Completed";
-
-
-                
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {                  
-                    using (Stream s = File.Open(saveFileDialog.FileName, FileMode.CreateNew))
-                    using (TextWriter sw = new StreamWriter(s))
-                    {
-                        TxtConsole.Text = resultsShema;
-                        sw.Write(TxtConsole.Text);
-                    }
-                }
+                TxtConsole.Text += $"> Total replaced: {replaceCount}." + Environment.NewLine + "Operation Completed";    
             }
             catch (Exception ex)
             {
                 TxtConsole.ForeColor = Color.IndianRed;
                 MessageBox.Show(ex.Message);
                 TxtConsole.Text += "> Operation Failed";
+            }
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (Stream s = File.Open(saveFileDialog.FileName, FileMode.CreateNew))
+                using (TextWriter sw = new StreamWriter(s))
+                {
+                    TxtConsole.Text = resultsShema;
+                    sw.Write(TxtConsole.Text);
+                }
             }
 
             TxtUrlPins.Focus();
@@ -280,7 +279,7 @@ namespace PinterestPinsIdsReplacer
                 TxtUrlBoard.Clear();
             }
             else { PicClearLinc.Show(); }
-        
+       
         }
     }
 }
