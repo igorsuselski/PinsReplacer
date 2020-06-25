@@ -249,6 +249,7 @@ namespace PinterestPinsIdsReplacer
         {
             TxtUrl.Text = @"https://widgets.pinterest.com/v3/pidgets/boards/";
             TxtUrlPins.Text = "pins/";
+            TxtUrl.SelectionStart = TxtUrl.Text.Length;
         }
 
         private void PictureBox2_Click(object sender, EventArgs e)
