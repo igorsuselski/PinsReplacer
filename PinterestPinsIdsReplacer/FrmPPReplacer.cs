@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace PinterestPinsIdsReplacer
 {
@@ -26,6 +27,7 @@ namespace PinterestPinsIdsReplacer
         public FrmPPReplacer()
         {
             InitializeComponent();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -98,7 +100,8 @@ namespace PinterestPinsIdsReplacer
                 if (IsValidURL(Url))
                 {
                     TxtConsole.Clear();
-                    TxtConsole.ForeColor = Color.DarkSlateGray;
+                    TxtConsole.BackColor = SystemColors.Desktop;
+                    TxtConsole.ForeColor = Color.White;
                     TxtConsole.Text += "> Get data" + Environment.NewLine;
                     PicLoader.Show();
                     Task<bool> getJson = new Task<bool>(GetJson);
@@ -112,7 +115,7 @@ namespace PinterestPinsIdsReplacer
                         PicIsValidJson.Show();
                         PicJson.Enabled = true;
                         BtnGenerateIDs.Enabled = true;
-                        BtnGenerateIDs.Focus();
+                        BtnGenerateIDs.Focus();                     
                     }
                     else
                     {
@@ -184,6 +187,7 @@ namespace PinterestPinsIdsReplacer
         private void BtnGenerateIDs_Click(object sender, EventArgs e)
         {
             TxtConsole.Clear();
+            TxtConsole.ForeColor = Color.White;
             string resultsShema = "";
             try
             {
@@ -213,12 +217,11 @@ namespace PinterestPinsIdsReplacer
                 }
 
                 TxtConsole.Text += "> " + resultsShema.ToString() + Environment.NewLine;
-                TxtConsole.ForeColor = Color.DarkCyan;
                 TxtConsole.Text += $"> Total replaced: {replaceCount}." + Environment.NewLine + "Operation Completed";    
             }
             catch (Exception ex)
             {
-                TxtConsole.ForeColor = Color.IndianRed;
+                TxtConsole.ForeColor = Color.LightCoral;
                 MessageBox.Show(ex.Message);
                 TxtConsole.Text += "> Operation Failed";
             }
@@ -242,18 +245,24 @@ namespace PinterestPinsIdsReplacer
             TxtConsole.ScrollToCaret();
         }
 
-        private void PictureBox3_Click(object sender, EventArgs e) => TxtUrl.Clear();
+        private void PictureBox3_Click(object sender, EventArgs e)
+        {
+            TxtUrl.Clear();
+            TxtConsole.BackColor = Color.LightSteelBlue;
+            PicJson.Enabled = false;
+        }
 
-        private void Postebins_Click(object sender, EventArgs e)
+        private void Pinterest_Click(object sender, EventArgs e)
         {
             TxtUrl.Text = @"https://widgets.pinterest.com/v3/pidgets/boards/";
             TxtUrlPins.Text = "pins/";
             TxtUrl.SelectionStart = TxtUrl.Text.Length;
         }
 
-        private void PictureBox2_Click(object sender, EventArgs e)
+        private void JSONVIew_Click(object sender, EventArgs e)
         {
             TxtConsole.Clear();
+            TxtConsole.ForeColor = Color.PeachPuff;          
             TxtConsole.Text = Response.ToString();
             JsonPreview = true;
         }

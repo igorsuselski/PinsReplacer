@@ -83,7 +83,7 @@
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBox1, "widgets.pinterest.com");
-            this.pictureBox1.Click += new System.EventHandler(this.Postebins_Click);
+            this.pictureBox1.Click += new System.EventHandler(this.Pinterest_Click);
             // 
             // label1
             // 
@@ -137,18 +137,18 @@
             this.PicJson.TabIndex = 6;
             this.PicJson.TabStop = false;
             this.toolTip1.SetToolTip(this.PicJson, "View json");
-            this.PicJson.Click += new System.EventHandler(this.PictureBox2_Click);
+            this.PicJson.Click += new System.EventHandler(this.JSONVIew_Click);
             // 
             // TxtConsole
             // 
             this.TxtConsole.BackColor = System.Drawing.Color.WhiteSmoke;
             this.TxtConsole.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TxtConsole.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TxtConsole.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.TxtConsole.ForeColor = System.Drawing.Color.White;
             this.TxtConsole.Location = new System.Drawing.Point(3, 128);
             this.TxtConsole.Name = "TxtConsole";
             this.TxtConsole.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.TxtConsole.Size = new System.Drawing.Size(628, 442);
+            this.TxtConsole.Size = new System.Drawing.Size(628, 445);
             this.TxtConsole.TabIndex = 0;
             this.TxtConsole.TabStop = false;
             this.TxtConsole.Text = "";
